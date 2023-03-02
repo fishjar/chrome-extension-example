@@ -6,3 +6,14 @@
 ```sh
 yarn build
 ```
+
+## wasm
+
+```sh
+# cargo install wasm-pack
+# cargo new wasm-lib --lib
+# cd wasm-lib/
+# wasm-pack build --target web --out-dir pkg
+yarn build:wasm
+yarn build
+```

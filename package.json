@@ -6,11 +6,13 @@
     "react": "^18.2.0",
     "react-app-rewired": "^2.2.1",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "wasm-lib": "file:wasm-lib/pkg"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-app-rewired build",
+    "build:wasm": "cd wasm-lib && wasm-pack build --target web --out-dir pkg",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

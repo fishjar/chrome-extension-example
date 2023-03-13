@@ -1,45 +1,45 @@
-import { createContext, useState, useEffect } from "react";
-import { ThemeProvider } from "@mui/material/styles";
+import { createContext, useState, useMemo } from "react";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { THEME_KEY, THEME_DARK, THEME_LIGHT } from "../consts";
-import lightTheme from "./light";
-import darkTheme from "./dark";
 
-const getTheme = (name) => (name === THEME_DARK ? darkTheme : lightTheme);
-const localThemeName = localStorage.getItem(THEME_KEY);
-const localTheme = getTheme(localThemeName);
-
-export const themeToCheck = (theme) => (theme === THEME_DARK ? true : false);
-export const checkToTheme = (checked) => (checked ? THEME_DARK : THEME_LIGHT);
-
-export const ThemeContext = createContext({
-  theme: localTheme,
-  themeName: localThemeName,
-  setThemeName: () => {},
+export const ColorModeContext = createContext({
+  toggleColorMode: () => {},
 });
 
 export default function MyThemeProvider(props) {
-  const [themeName, setThemeName] = useState(localThemeName);
-  const [theme, setTheme] = useState(localTheme);
+  const localMode =
+    localStorage.getItem(THEME_KEY) === THEME_DARK ? THEME_DARK : THEME_LIGHT;
+  const [mode, setMode] = useState(localMode);
 
-  useEffect(() => {
-    localStorage.setItem(THEME_KEY, themeName);
-    setTheme(getTheme(themeName));
-  }, [themeName]);
+  const colorMode = useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) =>
+          prevMode === THEME_LIGHT ? THEME_DARK : THEME_LIGHT
+        );
+      },
+    }),
+    []
+  );
+
+  const theme = useMemo(() => {
+    localStorage.setItem(THEME_KEY, mode);
+    return createTheme({
+      palette: {
+        mode,
+      },
+      ...props.themeOptions,
+    });
+  }, [mode, props.themeOptions]);
 
   return (
-    <ThemeContext.Provider
-      value={{
-        theme,
-        themeName,
-        setThemeName,
-      }}
-    >
+    <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         {props.children}
       </ThemeProvider>
-    </ThemeContext.Provider>
+    </ColorModeContext.Provider>
   );
 }

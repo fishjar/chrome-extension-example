@@ -7,29 +7,46 @@ import IconButton from "@mui/material/IconButton";
 import AlarmIcon from "@mui/icons-material/Alarm";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { ThemeContext, themeToCheck, checkToTheme } from "../../theme";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useTheme } from "@mui/material/styles";
+import { ColorModeContext } from "../../theme";
 import { MaterialUISwitch } from "../../comppnents";
 import { getLocalTime } from "../../utils";
 import "./App.css";
 
 function App() {
-  const { themeName, setThemeName } = useContext(ThemeContext);
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
   return (
     <div className="App">
       <header className="App-header">
         <p>Popup Page</p>
-        <p>Theme: {themeName}</p>
-        <p>Now: {getLocalTime()}</p>
+        <p>{getLocalTime()}</p>
       </header>
+      <div>
+        {theme.palette.mode} mode
+        <IconButton
+          sx={{ ml: 1 }}
+          onClick={colorMode.toggleColorMode}
+          color="inherit"
+        >
+          {theme.palette.mode === "dark" ? (
+            <Brightness7Icon />
+          ) : (
+            <Brightness4Icon />
+          )}
+        </IconButton>
+      </div>
       <FormControlLabel
         control={
           <MaterialUISwitch
             sx={{ m: 1 }}
-            checked={themeToCheck(themeName)}
-            onChange={(e) => setThemeName(checkToTheme(e.target.checked))}
+            checked={theme.palette.mode === "dark"}
+            onChange={colorMode.toggleColorMode}
           />
         }
-        label="MUI switch"
+        label={theme.palette.mode + " mode"}
       />
       <Stack direction="row" spacing={2}>
         <Button variant="contained">Hello World</Button>

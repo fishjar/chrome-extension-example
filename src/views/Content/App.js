@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>Options Page</p>
+        <p>Content Page</p>
         <p>{getLocalTime()}</p>
       </header>
       <div>

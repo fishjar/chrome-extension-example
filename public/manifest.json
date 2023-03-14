@@ -14,6 +14,7 @@
       "matches": ["http://*/*", "https://*/*"]
     }
   ],
+  "permissions": ["storage"],
   "icons": {
     "192": "images/logo192.png"
   },

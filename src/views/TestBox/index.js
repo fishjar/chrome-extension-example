@@ -13,17 +13,17 @@ import { useTheme } from "@mui/material/styles";
 import { ColorModeContext } from "../../theme";
 import { MaterialUISwitch } from "../../comppnents";
 import { getLocalTime } from "../../utils";
-import "./App.css";
 
-function App() {
+export default function TestBox() {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Options Page</p>
-        <p>{getLocalTime()}</p>
-      </header>
+    <div
+      style={{
+        minWidth: "400px",
+      }}
+    >
+      <p>{getLocalTime()}</p>
       <div>
         {theme.palette.mode} mode
         <IconButton
@@ -74,5 +74,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

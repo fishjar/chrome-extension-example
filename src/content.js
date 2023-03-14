@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import createCache from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 import ThemeProvider from "./theme";
-import App from "./views/Content/App";
+import App from "./views/Content";
 
 class XElement extends HTMLElement {
   connectedCallback() {

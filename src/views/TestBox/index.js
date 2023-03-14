@@ -13,10 +13,13 @@ import { useTheme } from "@mui/material/styles";
 import { ColorModeContext } from "../../theme";
 import { MaterialUISwitch } from "../../comppnents";
 import { getLocalTime } from "../../utils";
+import { useApiGetPosts, useApiGetUsers } from "../../apis";
 
 export default function TestBox() {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
+  const [postsState, fetchPosts, abortPosts] = useApiGetPosts({});
+  const [usersState, fetchUsers] = useApiGetUsers();
   return (
     <div
       style={{
@@ -49,12 +52,31 @@ export default function TestBox() {
         label={theme.palette.mode + " mode"}
       />
       <Stack direction="row" spacing={2}>
-        <Button variant="contained">Hello World</Button>
-        <Button variant="outlined" startIcon={<DeleteIcon />}>
-          Delete
+        <Button
+          variant="contained"
+          onClick={() => {
+            fetchPosts({});
+          }}
+        >
+          Fetch Posts {postsState.status}
         </Button>
-        <Button variant="contained" endIcon={<SendIcon />}>
-          Send
+        <Button
+          variant="outlined"
+          startIcon={<DeleteIcon />}
+          onClick={() => {
+            abortPosts();
+          }}
+        >
+          Abort Posts
+        </Button>
+        <Button
+          variant="contained"
+          endIcon={<SendIcon />}
+          onClick={() => {
+            fetchUsers({});
+          }}
+        >
+          Fetch Users {usersState.status}
         </Button>
       </Stack>
       <Stack direction="row" spacing={1}>

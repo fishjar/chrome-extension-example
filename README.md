@@ -15,5 +15,6 @@ yarn build
 # cd wasm-lib/
 # wasm-pack build --target web --out-dir pkg
 yarn build:wasm
+yarn add ./wasm-lib/pkg
 yarn build
 ```

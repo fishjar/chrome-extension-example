@@ -6,7 +6,11 @@ export const sendMsg = (type, args) => {
   return new Promise((resolve, reject) => {
     try {
       chrome.runtime.sendMessage({ type, args }, (res) => {
-        resolve(res);
+        if (res.error) {
+          reject(new Error(res.error));
+        } else {
+          resolve(res.data);
+        }
       });
     } catch (error) {
       reject(error);

@@ -81,18 +81,12 @@ const useFetch = (url, initialParams = null, method = "GET") => {
         const res = await sendMsg(MSG_TYPE_FETCH, { input, init });
         console.log("fetch res", res);
         if (signal.aborted) return;
-        if (res.error) {
-          dispatch({
-            type: FETCH_TYPE_FAILURE,
-            error: res.error,
-          });
-        } else {
-          dispatch({
-            type: FETCH_TYPE_SUCCESS,
-            payload: res.data,
-          });
-        }
+        dispatch({
+          type: FETCH_TYPE_SUCCESS,
+          payload: res,
+        });
       } catch (error) {
+        console.log("fetch err", error);
         if (signal.aborted) return;
         dispatch({
           type: FETCH_TYPE_FAILURE,

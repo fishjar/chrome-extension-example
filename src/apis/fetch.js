@@ -1,5 +1,7 @@
 import { useState, useEffect, useReducer, useRef } from "react";
 import queryString from "query-string";
+import { sendMsg } from "../utils";
+import { MSG_TYPE_FETCH } from "../consts";
 
 const FETCH_STATUS_IDLE = "idle";
 const FETCH_STATUS_LOADING = "loading";
@@ -37,7 +39,7 @@ const fetchReducer = (state, action) => {
   }
 };
 
-const newRequest = (url, params, method, signal) => {
+const newRequest = (url, params, method) => {
   let body = null;
   const baseUrl = process.env.REACT_APP_API_BASE_URL;
   url = `${baseUrl}${url}`;
@@ -49,17 +51,14 @@ const newRequest = (url, params, method, signal) => {
   } else {
     body = JSON.stringify(params);
   }
-  const request = new Request(url);
-  const headers = new Headers({
-    "Content-Type": "application/json",
-  });
   const init = {
     method,
-    headers,
+    headers: {
+      "Content-Type": "application/json",
+    },
     body,
-    signal,
   };
-  return [request, init];
+  return [url, init];
 };
 
 const useFetch = (url, initialParams = null, method = "GET") => {
@@ -78,20 +77,22 @@ const useFetch = (url, initialParams = null, method = "GET") => {
     const fetchData = async () => {
       dispatch({ type: FETCH_TYPE_LOADING });
       try {
-        const [request, init] = newRequest(url, params, method, signal);
-        const response = await fetch(request, init);
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(
-            `[${response.status}] ${
-              (data && data.message) || "Network response was not OK"
-            }`
-          );
-        }
+        const [input, init] = newRequest(url, params, method);
+        const res = await sendMsg(MSG_TYPE_FETCH, { input, init });
+        console.log("fetch res", res);
         if (signal.aborted) return;
-        dispatch({ type: FETCH_TYPE_SUCCESS, payload: data });
+        if (res.error) {
+          dispatch({
+            type: FETCH_TYPE_FAILURE,
+            error: res.error,
+          });
+        } else {
+          dispatch({
+            type: FETCH_TYPE_SUCCESS,
+            payload: res.data,
+          });
+        }
       } catch (error) {
-        console.error(error);
         if (signal.aborted) return;
         dispatch({
           type: FETCH_TYPE_FAILURE,

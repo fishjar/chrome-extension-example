@@ -15,6 +15,7 @@
     }
   ],
   "permissions": ["storage"],
+  "host_permissions": ["https://jsonplaceholder.typicode.com/"],
   "icons": {
     "192": "images/logo192.png"
   },

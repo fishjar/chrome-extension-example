@@ -13,13 +13,14 @@ import { useTheme } from "@mui/material/styles";
 import { ColorModeContext } from "../../theme";
 import { MaterialUISwitch } from "../../comppnents";
 import { getLocalTime } from "../../utils";
-import { useApiGetPosts, useApiGetUsers } from "../../apis";
+import { useApiGetPosts, useApiGetUsers, useApiGetNotfound } from "../../apis";
 
 export default function TestBox() {
   const theme = useTheme();
   const colorMode = useContext(ColorModeContext);
   const [postsState, fetchPosts, abortPosts] = useApiGetPosts({});
   const [usersState, fetchUsers] = useApiGetUsers();
+  const [notfoundState, fetchNotfound] = useApiGetNotfound();
   return (
     <div
       style={{
@@ -51,7 +52,7 @@ export default function TestBox() {
         }
         label={theme.palette.mode + " mode"}
       />
-      <Stack direction="row" spacing={2}>
+      <Stack spacing={2}>
         <Button
           variant="contained"
           onClick={() => {
@@ -77,6 +78,15 @@ export default function TestBox() {
           }}
         >
           Fetch Users {usersState.status}
+        </Button>
+        <Button
+          variant="contained"
+          endIcon={<SendIcon />}
+          onClick={() => {
+            fetchNotfound({});
+          }}
+        >
+          Fetch Notfound {notfoundState.status}
         </Button>
       </Stack>
       <Stack direction="row" spacing={1}>

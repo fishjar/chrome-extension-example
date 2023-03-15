@@ -8,7 +8,14 @@ import CloseIcon from "@mui/icons-material/Close";
 export default function DraggableBox(props) {
   return (
     <Draggable handle=".draggable-handle" defaultPosition={{ x: 0, y: 0 }}>
-      <Card sx={{ position: "fixed", left: "50%", top: "50%" }}>
+      <Card
+        sx={{
+          position: "fixed",
+          left: "50%",
+          top: "50%",
+          zIndex: 2147483647,
+        }}
+      >
         <CardHeader
           className="draggable-handle"
           title="CardHeader"
